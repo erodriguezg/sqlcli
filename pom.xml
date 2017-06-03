@@ -18,6 +18,7 @@
 
 		<spring.version>4.3.8.RELEASE</spring.version>
 		<commons-cli.version>1.4</commons-cli.version>
+		<ant.version>1.9.0</ant.version>
 		<slf4j.version>1.7.25</slf4j.version>
 	</properties>
 
@@ -36,12 +37,32 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.ant</groupId>
+			<artifactId>ant</artifactId>
+			<version>${ant.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
 
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 
 </project>
