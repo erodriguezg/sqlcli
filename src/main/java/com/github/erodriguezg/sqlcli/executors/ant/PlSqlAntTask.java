@@ -1,4 +1,4 @@
-package com.github.erodriguezg.sqlcli.ant;
+package com.github.erodriguezg.sqlcli.executors.ant;
 
 /**
  * Created by eduar on 03/06/2017.

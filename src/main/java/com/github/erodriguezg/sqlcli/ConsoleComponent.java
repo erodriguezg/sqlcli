@@ -1,7 +1,9 @@
 package com.github.erodriguezg.sqlcli;
 
-import com.github.erodriguezg.sqlcli.connectionfactory.ConnectionFactory;
-import com.github.erodriguezg.sqlcli.connectionfactory.ConnectionFactoryComponent;
+import com.github.erodriguezg.sqlcli.datasource.DataSource;
+import com.github.erodriguezg.sqlcli.datasource.DataSourceFactory;
+import com.github.erodriguezg.sqlcli.executors.Executor;
+import com.github.erodriguezg.sqlcli.executors.ExecutorFactory;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,10 @@ public class ConsoleComponent {
     private Logger log;
 
     @Autowired
-    private ConnectionFactoryComponent connectionFactoryComponent;
+    private DataSourceFactory dataSourceFactory;
+
+    @Autowired
+    private ExecutorFactory executorFactory;
 
     private Options options;
 
@@ -61,23 +66,23 @@ public class ConsoleComponent {
             return;
         }
 
-        ConnectionFactory connectionFactory = getConnectionFactory(cmd);
-        procesarScriptFiles(cmd.getOptionValues(OPTION_SCRIPT_FILE), connectionFactory);
-        procesarStatements(cmd.getOptionValues(OPTION_STATEMENT), connectionFactory);
+        DataSource dataSource = getDataSource(cmd);
+        List<Executor> executors =getExecutors(cmd, dataSource);
+
+        executors.stream().forEach(executor -> executor.execute());
     }
 
-    private void procesarScriptFiles(String[] scriptFiles, ConnectionFactory connectionFactory) {
-
-    }
-
-    private void procesarStatements(String[] statements, ConnectionFactory connectionFactory) {
-
-    }
-    private ConnectionFactory getConnectionFactory(CommandLine cmd) {
+    private DataSource getDataSource(CommandLine cmd) {
         String jdbcUrl = cmd.getOptionValue(OPTION_JDBC_URL);
         String username = cmd.getOptionValue(OPTION_USER);
         String password = cmd.getOptionValue(OPTION_PASS);
-        return connectionFactoryComponent.getConnectorFactory(jdbcUrl, username, password);
+        return dataSourceFactory.getDataSource(jdbcUrl, username, password);
+    }
+
+    private List<Executor> getExecutors(CommandLine cmd, DataSource dataSource) {
+        String[] statements = cmd.getOptionValues(OPTION_STATEMENT);
+        String[] scriptsFiles = cmd.getOptionValues(OPTION_SCRIPT_FILE);
+        return executorFactory.getExecutors(statements, scriptsFiles, dataSource);
     }
 
 }
