@@ -2,7 +2,6 @@ package com.github.erodriguezg.sqlcli;
 
 import com.github.erodriguezg.sqlcli.datasource.DataSource;
 import com.github.erodriguezg.sqlcli.datasource.DataSourceFactory;
-import com.github.erodriguezg.sqlcli.executors.Executor;
 import com.github.erodriguezg.sqlcli.executors.ExecutorFactory;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
@@ -61,15 +60,14 @@ public class ConsoleComponent {
         //validaciones
         List<String> requiredOptions = Arrays.asList(OPTION_JDBC_URL, OPTION_USER, OPTION_PASS);
         boolean validRequiredOptions = requiredOptions.stream().allMatch(option -> cmd.hasOption(option));
-        if(!validRequiredOptions) {
+        if (!validRequiredOptions) {
             log.info("These options are required: {}", requiredOptions);
             return;
         }
 
         DataSource dataSource = getDataSource(cmd);
-        List<Executor> executors =getExecutors(cmd, dataSource);
+        runsExecutors(cmd, dataSource);
 
-        executors.stream().forEach(executor -> executor.execute());
     }
 
     private DataSource getDataSource(CommandLine cmd) {
@@ -79,10 +77,10 @@ public class ConsoleComponent {
         return dataSourceFactory.getDataSource(jdbcUrl, username, password);
     }
 
-    private List<Executor> getExecutors(CommandLine cmd, DataSource dataSource) {
+    private void runsExecutors(CommandLine cmd, DataSource dataSource) {
         String[] statements = cmd.getOptionValues(OPTION_STATEMENT);
         String[] scriptsFiles = cmd.getOptionValues(OPTION_SCRIPT_FILE);
-        return executorFactory.getExecutors(statements, scriptsFiles, dataSource);
+        executorFactory.runExecutors(statements, scriptsFiles, dataSource);
     }
 
 }
