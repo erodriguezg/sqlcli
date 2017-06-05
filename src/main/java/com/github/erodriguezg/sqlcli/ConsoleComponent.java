@@ -19,7 +19,7 @@ import java.util.List;
 public class ConsoleComponent {
 
     private static final String OPTION_JDBC_URL = "jdbcUrl";
-    private static final String OPTION_USER = "user";
+    private static final String OPTION_USER = "username";
     private static final String OPTION_PASS = "password";
     private static final String OPTION_STATEMENT = "statement";
     private static final String OPTION_SCRIPT_FILE = "scriptFile";
@@ -37,7 +37,7 @@ public class ConsoleComponent {
 
     @PostConstruct
     public void iniciar() {
-        log.info("iniciando console component");
+        log.debug("iniciando console component");
 
         options = new Options();
         // add t option

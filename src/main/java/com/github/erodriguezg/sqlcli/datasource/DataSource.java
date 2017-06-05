@@ -7,5 +7,6 @@ import java.sql.Connection;
  */
 public interface DataSource {
     boolean matchForJdbcUrl(String jdbcUrl);
+    void iniciar(String jdbcUrl, String username, String password);
     Connection getConnection();
 }

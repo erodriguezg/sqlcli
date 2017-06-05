@@ -16,8 +16,10 @@ public class DataSourceFactory {
         Optional<DataSource> optional = getDataSources().stream()
                 .filter(dataSource -> dataSource.matchForJdbcUrl(jdbcUrl))
                 .findFirst();
-        if(optional.isPresent()) {
-            return optional.get();
+        if (optional.isPresent()) {
+            DataSource dataSource = optional.get();
+            dataSource.iniciar(jdbcUrl, username, password);
+            return dataSource;
         }
         throw new IllegalStateException("No datasource match for jdbc url: " + jdbcUrl);
     }

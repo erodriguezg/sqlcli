@@ -1,5 +1,8 @@
 package com.github.erodriguezg.sqlcli.datasource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,15 +12,19 @@ import java.sql.SQLException;
  */
 public abstract class AbstractDataSource implements DataSource {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractDataSource.class);
+
     private String jdbcUrl;
     private String username;
     private String password;
 
+    @Override
     public void iniciar(String jdbcUrl, String username, String password) {
         this.jdbcUrl = jdbcUrl;
         this.username = username;
         this.password = password;
         cargarDriver();
+        LOG.info("Conectado a {}, username: {}, password: {}", jdbcUrl, username, password);
     }
 
     public Connection getConnection() {
